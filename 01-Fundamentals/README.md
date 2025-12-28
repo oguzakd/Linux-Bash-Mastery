@@ -1,702 +1,108 @@
-# Linux_Bash_Scripting_Tum_Konular
-Linux bash scripting ile ilgili tüm konuların işlendiği dosya ve dersler
+# 📚 Linux & Bash Scripting: Temel Kavramlar ve Uygulamalar
 
-# [**Linux Bash**](https://www.yusufsezer.com.tr/linux-bash/)
+Bu klasör, Linux ekosisteminin kalbi olan **Bash (Bourne-again shell)** üzerine temelden ileri seviyeye ders notlarını ve uygulama örneklerini içerir.
 
-Linux tabanlı işletim sistemlerinde varsayılan olarak kullanılan Bash komut yorumlayıcısı ve Bash script ile ilgili bilgiler yer alıyor.
+---
 
-## **Bash nedir?**
+## 🛠 Bash Nedir?
+Bash, terminale yazdığımız komutları yorumlayarak işletim sistemi çekirdeğine ileten bir **Komut Yorumlayıcısıdır (Shell)**. 
 
-Bash veya **B**ourne-**a**gain **sh**ell terminal veya komut yorumlayıcısı olarak adlandırılan alana yazılan komutları yorumlayan komut yorumlayıcısıdır.
+> **Not:** Sisteminizde hangi shell'in aktif olduğunu öğrenmek için: `echo $SHELL`
 
-Aşağıdaki gibi bir komut yazdığımızda komut yorumlayıcısı yazılan komutu işleyerek sonucu ekrana yazdırır.
+## 📝 Scripting Temelleri
 
-```
-ls
-```
+### Shebang (#!) Kullanımı
+Bir Bash scriptinin en önemli satırı ilk satırdır. İşletim sistemine bu dosyanın hangi yorumlayıcı ile çalışacağını söyler:
+- `#!/bin/bash` -> Standart Bash kullanımı
+- `#!/bin/sh` -> POSIX uyumlu kabuk kullanımı
 
-İşte bu yorumlama işlemini işletim sistemi çekirdeği ile birlikte yapan ve **SHELL** olarak adlandırılan komut yorumlayıcılarıdır.
-
-## **Neden Bash**
-
-Bash harici sh, csh, ksh, tcsh, zsh gibi çeşitli komut yorumlayıcıları da vardır.
-
-Bunlardan herhangi birini kullanabilirsiniz.
-
-Ancak Linux tabanlı işletim sistemlerinde varsayılan olarak Bash geldiğinden ve çokça kullanıldığından Bash kullanmak faydalı olacaktır.
-
-Kullanılan komut yorumlayıcısını öğrenmek için aşağıdaki komut kullanılır.
-
-```
-echo $SHELL
+### Dosya İzinleri
+Yazdığınız bir scripti çalıştırmak için önce **çalıştırma yetkisi** vermelisiniz:
+```bash
+chmod +x script_adi.sh
+./script_adi.sh
 ```
 
-Bash komut yorumlayıcısı değişken, operatör, koşullu ifadeler, döngüler ve fonksiyon kullanımına imkan verir.
+## 🧱 Değişkeler ve Veri Tipleri
 
-## **Bash Script**
+Bash'te değişken tanımlarken = işaretinin yanında boşluk bırakılmaz.
 
-Bazen bir komut ihtiyacımız olan işlemi yapmak için yeterli olmayabilir.
-
-Bir değişken tanımlayıp bu değişkeni ekrana yazdıralım.
-
-```
-ADI="Yusuf SEZER"; echo $ADI;
-```
-
-Komut kısa olduğundan bunu komut yorumlayıcısına yazarak çalıştırabiliriz.
-
-Ancak kullanıcıdan alınan bir değeri kontrol edip bir değişkene aktarmak veya döngü kullanmak istediğimizde komutlar karmaşık hale gelecektir.
-
-Bu durumda komutların bir dosyaya yazılması okunabilirlik ve tekrar kullanılabilirlik için faydalı olacaktır.
-
-## **Basit bir örnek**
-
-Aşağıda yer alan basit bash script örneğini herhangi bir dizine **komut** olarak kayıt edin.
-
-```
-#!/bin/bash
-echo "Merhaba dünya"
+```bash
+ADI="Oğuzhan"          # Değişken tanımlama
+echo $ADI              # Değişkeni çağırma
+readonly SABIT="123"   # Değiştirilemez değişken
+unset ADI              # Değişkeni silme
 ```
 
-Daha sonra **komut** dosyasını **bash** komutu ile çalıştırın.
-
-```
-bash komut
-```
-
-Bash script dosyaları çalıştırılabilir olma izni verilerek çalıştırılabilir.
-
-```
-chmod +x komut
+### Diziler (Arrays)
+```bash
+KISILER=("Yusuf" "Ramazan" "Sinan")
+echo ${KISILER[0]}      # İlk eleman
+echo ${#KISILER[@]}     # Eleman sayısı
 ```
 
-Çalıştırılabilir olma izni verildikten sonra aşağıdaki biçimde çalıştırılır.
+## 🎮 Kontrol Yapıları
 
-```
-./komut
-```
+### Koşullu İfadeler (If/Else)
+Aritmetik karşılaştırmalarda özel flag'ler kullanılır:
 
-Bash script yazarken dikkat edilmesi gereken en önemli kısım ilk satırdır.
+- eq: Eşit (==)
 
-İlk satırda shebang (#!) ve ardından kullanılan komut yorumlayıcısı yolu yer alır.
+- ne: Eşit değil (!=)
 
-Komut yorumlayıcısı sh, php, perl vb. olabilir.
+- gt: Büyük (>)
 
-```
-#!/bin/sh
-echo "Merhaba dünya"
-```
+- lt: Küçük (<)
 
-Aşağıdaki komutun çalışması için PHP kurulu olması gerekir.
-
-```
-#!/bin/php
-<?php echo "Merhaba dünya"; ?>
-```
-
-İşletim sistemi ilk satırda yer alan komut yorumlayıcısına yazılan komutları iletir ve komut yorumlayıcısı komutları çalıştırır.
-
-## **Yorum satırı**
-
-Bash komutlarını anlaşılabilir hale getirmek veya bir komutun çalışmasını engellemek için yorum satırı kullanılır.
-
-```
-#!/bin/bash
-# Burası yorum alanı
-echo "Merhaba dünya"
-# echo "Burası çalışmayacaktır"
-```
-
-**NOT:** Uzun bash script dosyalarında yorum satırı kullanmak faydalı olacaktır.
-
-## **Değişkenler**
-
-Verileri geçici olarak saklamak için değişken kullanılır.
-
-```
-#!/bin/bash
-ADI="Yusuf SEZER"
-echo $ADI
-```
-
-Değişken tanımlarken tek veya çift tırnak kullanılabilir.
-
-Ancak çift tırnak içine yazılan özel ifadeler bash tarafından yorumlanır.
-
-```
-#!/bin/bash
-ADI="Yusuf $((5 + 7))"
-echo $ADI
-```
-
-Değişken uzunluğunu almak için **${#degisken_adi}** kullanılır.
-
-```
-#!/bin/bash
-ADI="Yusuf SEZER"
-echo $ADI - ${#ADI}
-```
-
-Sadece okunabilir değişken tanımlamak için **readonly** anahtar kelimesi kullanılır.
-
-```
-#!/bin/bash
-readonly ADI="Yusuf SEZER"
-ADI="Yusuf Sefa SEZER" # Uyarı verir.
-echo "Hoşgeldin, $ADI"
-```
-
-Tanımlanan değişkeni kaldırmak için **unset** anahtar kelimesi kullanılır.
-
-```
-#!/bin/bash
-ADI="Yusuf SEZER"
-unset ADI
-echo "Hoşgeldin, $ADI"
-```
-
-Dizi tanımlamak için aşağıdaki yöntemlerden birisi kullanılır.
-
-```
-#!/bin/bash
-KISILER=("Yusuf" "Ramazan" "Sinan" "Mehmet")
-KISI_SAYISI=${#KISILER[@]}  # eleman sayısı
-echo $KISI_SAYISI
-echo ${KISILER[3]}  # 4.eleman
-```
-
-veya
-
-```
-#!/bin/bash
-KISI[0]="Yusuf"
-KISI[1]="Ramazan"
-KISI[2]="Sinan"
-KISI[3]="Mehmet"
-echo ${KISI[*]}  # tüm elemanlar
-```
-
-**NOT:** Dizinin ilk elemanına 0 ile erişilir.
-
-Bash script ile işletim sistemine ait değişkenlere de erişilebilir.
-
-```
-#!/bin/bash
-echo "Kullanıcı:" $USER
-echo "Dizin:" $HOME
-```
-
-Diğer işletim sistemi değişkenlerini öğrenmek için aşağıdaki komut kullanılır.
-
-```
-env
-```
-
-Oluşturulan değişkeni işletim sistemine atamak için **export** anahtar kelimesi kullanılır.
-
-```
-#!/bin/bash
-export ADI="Yusuf SEZER"
-echo $ADI
-bash
-```
-
-**NOT:** İşletim sistemi yeniden başlatıldıktan sonra değişken silinecektir.
-
-Değişkenlerde komut sonuçları saklanabilir.
-
-```
-#!/bin/bash
-#SONUC=$(ls)
-#SONUC=$(date +%Y-%m-%d)
-#veya
-SONUC=`ls`
-echo $SONUC
-```
-
-Bash script dosyası çalıştırırken dosya adına $0, komut işlem numarasına $$, parametrelere $1,$2,$n ile parametre sayısına $# ile erişilir.
-
-```
-#!/bin/bash
-echo "Komut ID: " $$
-echo "Komut: " $0
-echo "Parametre: " $1
-echo "Toplam: " $#
-```
-
-## **Kullanıcıdan değer almak**
-
-Kullanıcıdan değer almak için **read** anahtar kelimesi kullanılır.
-
-```
-#!/bin/bash
-read
-echo "Yazılan değer:" $REPLY
-```
-
-Alınan değeri değişkene aktarmak için **read** anahtar kelimesine değişken adının yazmak yeterli olacaktır.
-
-```
-#!/bin/bash
-echo "Adınız nedir?"
-read ADI
-echo "Hoşgeldin, $ADI"
-```
-
-Değer alırken çeşitli parametrelerde kullanılabilir.
-
-```
-#!/bin/bash
-read -p "Adınız:" ADI
-read -sp "Şifreniz:" SIFRE
-echo
-echo $ADI:$SIFRE
-```
-
-## **Aritmetik operatörler**
-
-Bash ile aritmetik işlemler yapmak için **let** anahtar kelimesi kullanılır.
-
-```
-#!/bin/bash
-read -p "Birinci sayı:" SAYI1
-read -p "İkinci sayı:" SAYI2
-
-let SONUC=SAYI1+SAYI2
-echo "Toplama: "$SONUC
-
-let SONUC=SAYI1-SAYI2
-echo "Çıkarma: "$SONUC
-
-let SONUC=SAYI1*SAYI2
-echo "Çarpama: "$SONUC
-
-let SONUC=SAYI1/SAYI2
-echo "Bölme: "$SONUC
-
-let SONUC=SAYI1%SAYI2
-echo "Mod: "$SONUC
-
-let SONUC=SAYI1**SAYI2
-echo "Üst: "$SONUC
-
-let SONUC++
-echo "Arttırma: "$SONUC
-
-let SONUC--
-echo "Azaltma: "$SONUC
-```
-
-Aritmetik işlemler için **expr** ve çift parantez de kullanılabilir.
-
-```
-#!/bin/bash
-A=50
-B=40
-
-echo `expr $A + $B`
-echo $(($A + $B))
-```
-
-## **Koşullu ifadeler**
-
-Bir koşula veya şarta bağlı olarak işlem yapmak için **if** yapısı kullanılır.
-
-Temel kullanımı aşağıdaki gibidir.
-
-```
-if [ <şart> ]
-then
-  <komutlar>
-fi
-```
-
-Basit bir örnek;
-
-```
-#!/bin/bash
-A=50
-B=50
-
-if [ $A -eq $B ]
-then
- echo "$A ve $B eşittir."
-fi
-```
-
-**NOT:** Koşullu ifadelerdeki şartlar **test** komutu ile işlenir.
-
-**Aritmetiksel operatörler**
-
-- eq Eşittir.
-- ne Eşit değildir.
-- gt Büyüktür.
-- ge Büyük eşittir.
-- lt Küçüktür.
-- le Küçük eşittir.
-
-**Metin operatörleri**
-
-=   Eşittir.
-
-=!  Eşit değildir.
-
-- z Uzunluk sıfırdır.
-- n Uzunluk sıfır değildir.
-
-**Mantıksal operatörler**
-
-!   Değildir.
-
-- a Ve
-- o Veya
-
-**Dosya ve dizin operatörleri**
-
-- f Dosya özel mi yoksa sıradan mı?
-- r Dosya okunabilir mi?
-- w Dosya yazılabilir mi?
-- x Dosya çalıştırılabilir mi?
-- d Dosya mı dizin mi?
-- s Dosya boş mu dolu mu?
-- e Dosya var mı yok mu?
-
-Detaylı bilgiye **man test** komutu ile ulaşabilirsiniz.
-
-Koşul sağlanmadığı durumda **else** ile başka komutlarda çalıştırılabilir.
-
-```
-#!/bin/bash
-A=50
-B=40
-
-if [ $A -eq $B ]
-then
- echo "$A ve $B eşittir."
+```bash
+if [ $A -gt $B ]; then
+    echo "A büyüktür B"
 else
- echo "$A ve $B eşit değildir."
+    echo "Eşit veya küçük"
 fi
 ```
 
-Bir koşul ikiden fazla sonuç veriyorsa **elif** ile başka bir koşulda belirtilebilir.
+### Case Yapısı (Switch-Case)
+Çoklu seçim işlemlerinde daha okunaklı bir yapı sunar:
 
-```
-#!/bin/bash
-A=50
-B=40
-
-if [ $A -gt $B ]
-then
- echo "$A sayısı $B sayısından büyüktür."
-elif [ $A -lt $B ]
-then
- echo "$A sayısı $B sayısından küçüktür."
-else
- echo "$A ve $B eşittir."
-fi
-```
-
-Mantıksal operatörler iki şartı birbirine bağlamak için kullanılır.
-
-Örneğin; Kullanıcı adı **Yusuf** ve şifresi **SEZER** ise başarıyla giriş yapıldı yazan bir script yazmak istersek **-a**  veya **&&** mantıksal operatörlerini kullanabiliriz.
-
-```
-#!/bin/bash
-read -p "Adınız:" ADI
-read -sp "Şifreniz:" SIFRE
-echo
-if [ $ADI = "Yusuf" ] && [ $SIFRE = "SEZER" ]
-#if [ $ADI = "Yusuf" -a $SIFRE = "SEZER" ]
-then
- echo "Başarıyla giriş yapıldı."
-else
- echo "Kullanıcı adı veya şifre yanlış görünüyor."
-fi
-```
-
-Birden fazla koşul olması kodları karmaşık hale getirir.
-
-Bu durumda **case** yapısı kullanılabilir.
-
-Temel kullanımı aşağıdaki gibidir.
-
-```
-case <değişken-değer> in
-<durum-1>) <komutlar>
-;;
-<durum-2>) <komutlar>
-;;
-esac
-```
-
-Örnek kullanım aşağıdaki gibidir.
-
-```
-#!/bin/bash
-
-read -p "Haftanın kaçıncı günü:" GUN
-
+```bash
 case $GUN in
-    1) echo "Pazartesi"
-    ;;
-    2) echo "Salı"
-    ;;
-    3) echo "Çarşamba"
-    ;;
-    4) echo "Perşembe"
-    ;;
-    5) echo "Cuma"
-    ;;
-    6) echo "Cumartesi"
-    ;;
-    7) echo "Pazar"
-    ;;
-    *) echo "Hatalı bir gün"
-    ;;
+    1) echo "Pazartesi" ;;
+    7) echo "Pazar" ;;
+    *) echo "Geçersiz Gün" ;;
 esac
 ```
 
-Bash menü veya seçme işlemlerinde kullanmak için **select** yapısı yer alır.
-
-Örnek kullanım aşağıdaki gibidir.
-
-```
-#!/bin/bash
-
-PS3="İşlem:"
-
-select ISLEM in yedekal yedekyukle hiçbiri çıkış
-do
-   case $ISLEM in
-      yedekal)
-         echo "Yedek alma işlemi"
-      ;;
-      yedekyukle)
-         echo "Yedek yükleme işlemi"
-      ;;
-      hiçbiri|çıkış)
-         break
-      ;;
-      *) echo "Hatalı işlem"
-      ;;
-   esac
+### Döngüler (Loops)
+For Döngüsü
+```bash
+for i in {1..5}; do
+    echo "Sayı: $i"
 done
 ```
+While & Until
+While: Şart doğru olduğu sürece çalışır.
 
-## **Döngüler**
+Until: Şart yanlış olduğu sürece (şart sağlanana kadar) çalışır.
 
-Tekrar eden işlemlerde **for**, **while** ve **until** döngüleri kullanılır.
+## 🏗 Fonksiyonlar
 
-**for** kullanımı aşağıdaki gibidir.
-
-```
-for degisken in <liste>
-do
- <komutlar>
-done
-```
-
-Örnek kullanım aşağıdaki gibidir.
-
-```
-#!/bin/bash
-
-for SIRA in {1..10}
-do
- echo $SIRA
-done
-```
-
-Dizi elemanlarını listelemek için aşağıdaki komut kullanılabilir.
-
-```
-#!/bin/bash
-KISILER=("Yusuf" "Ramazan" "Sinan" "Mehmet");
-
-for KISI in ${KISILER[*]}
-do
- echo $KISI
-done
-```
-
-for döngüsünün geniş bir kullanım şekli vardır.
-
-**while** kullanımı aşağıdaki gibidir.
-
-```
-while [ <şart> ]
-do
-  <komutlar>
-done
-```
-
-Örnek kullanım aşağıdaki gibidir.
-
-```
-#!/bin/bash
-A=10
-
-while [ $A -gt 0 ]
-do
-  echo $A
-  A=$(($A - 1))
-  #A=`expr $A - 1`
-done
-```
-
-**until** kullanımı aşağıdaki gibidir.
-
-```
-until [ <şart> ]
-do
-  <komutlar>
-done
-```
-
-until döngüsünün while döngüsünden farkı şart yanlış olduğu sürece çalışmasıdır.
-
-```
-#!/bin/bash
-A=10
-
-until [ ! $A -gt 0 ]
-do
-  echo $A
-  A=$(($A - 1))
-  #A=`expr $A - 1`
-done
-```
-
-Döngüler iç içe de kullanılabilir.
-
-```
-#!/bin/bash
-A=0
-
-while [ "$A" -lt 10 ]
-do
-  B="$A"
-  while [ "$B" -ge 0 ]
-  do
-    echo -n "$B "
-    ((B--))
-  done
-  echo
-  ((A++))
-done
-```
-
-Döngü adımını atlamak için **continue** anahtar kelimesi kullanılır.
-
-```
-#!/bin/bash
-
-for SAYI in {1..5}
-do
-  if [ $SAYI -eq 3 -o $SAYI -eq 5 ]
-  then
-    continue;
-  fi
-  echo $SAYI
-done
-```
-
-Döngüyü sonlandırmak için **break** anahtar kelimesi kullanılır.
-
-```
-#!/bin/bash
-
-for SAYI in {1..5}
-do
-  if [ $SAYI -eq 3 ]
-  then
-    break;
-  fi
-  echo $SAYI
-done
-```
-
-## **Fonksiyonlar**
-
-Komutları düzenli hale getirmek ve yazılan komutları tekrar kullanabilmek için fonksiyon yapısı kullanılır.
-
-Fonksiyonlar aşağıdaki gibi tanımlanır.
-
-```
-fonksiyon_adi () {
-  <komutlar>
-}
-veya
-function fonksiyon_adi {
-  <komutlar>
-}
-```
-
-Fonksiyon isimleri anlaşılabilir ve işlevini belirten bir isim kullanmak faydalı olacaktır.
-
-```
-#!/bin/bash
-adi_yazdir () {
-echo "Yusuf SEZER"
+Kodun tekrar kullanılabilirliğini sağlar. Fonksiyon içinde tanımlanan değişkenlerin globali etkilememesi için local anahtar kelimesi kullanılmalıdır.
+```bash
+merhaba_de() {
+    local ISIM=$1
+    echo "Merhaba $ISIM"
 }
 
-adi_yazdir
-adi_yazdir
+merhaba_de "Oğuzhan"
 ```
 
-Fonksiyonlar kullanıldığı satırdan önce tanımlanmalıdır.
+## 🚀 Pratik Kullanıcı Etkileşimi
 
-Fonksiyonlar parametrelerine $1, $2, $n ile erişilir.
-
-```
-#!/bin/bash
-yazdir () {
-echo "Gönderilen değer:" $1
-}
-
-yazdir "Merhaba dünya"
+Kullanıcıdan veri almak için read komutu kullanılır:
+```bash
+read -p "Adınızı giriniz: " ADI
+read -sp "Şifreniz: " SIFRE
 ```
 
-Değer döndürmek için **return** anahtar kelimesi kullanılır ve **$?** ile döndürülen değere ulaşılır.
-
-```
-#!/bin/bash
-topla () {
-  return `expr $1 + $2`
-}
-
-topla 10 20
-echo $?
-```
-
-Fonksiyon içinde tanımlanan değişkenlere fonksiyon dışından erişilebilir.
-
-```
-#!/bin/bash
-topla () {
-  ADI="Yusuf SEZER"
-}
-
-topla
-echo $ADI
-```
-
-Bu durumun önüne geçmek için **local** anahtar kelimesi kullanılır.
-
-```
-#!/bin/bash
-topla () {
-  local ADI="Yusuf SEZER"
-}
-
-topla
-echo $ADI
-```
-
-Bash içinde yer alan değişken, operatör, koşullu ifadeler, döngüler, fonksiyonlar gibi özellikler sayesinde özel Bash script dosyaları hazırlayabilir ve kullanabilirsiniz.
-
-Yazılan Bash script içinde Linux komut satırında kullanılan tüm komutlar kullanılabilir.
-
-Bash script içinde Linux komutlarını kullanarak yedekleme, yedek alma, dosya gönderme, sistem durumu gibi çeşitli araçlar yapabilirsiniz.
-
-Yapılan her bir iş öncesi olduğu gibi Bash script hazırlarken de plan yapmak faydalı olacaktır.
+Bu notlar öğrenim sürecimdeki projelerin temelini oluşturmaktadır. Uygulamalı projeler için bir üst dizindeki 02-Projects klasörüne göz atabilirsiniz.
