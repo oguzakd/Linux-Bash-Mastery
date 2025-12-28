@@ -1,0 +1,64 @@
+#!/bin/bash
+
+echo "----------------------------"
+echo "Server Performance Stats"
+echo "----------------------------"
+
+# EN - OS and uptime info
+# TR - İşletim sistemi ve çalışma süresi bilgisi
+echo "🖥️  OS Version:"
+cat /etc/os-release | grep PRETTY_NAME | cut -d= -f2
+echo
+
+echo "⏱️  Uptime:"
+uptime -p
+echo
+
+echo "💡 Load Average:"
+uptime | awk -F'load average: ' '{ print $2 }'
+echo
+
+echo "👥 Logged in Users:"
+who | wc -l
+echo
+
+# CPU Usage
+# İşlemci Kullanımı
+echo "🔥 Total CPU Usage:"
+top -bn1 | grep "Cpu(s)" | awk '{print "Used: " $2 + $4 "%, Idle: " $8 "%"}'
+echo
+
+# Memory Usage
+# Hafıza Kullanımı
+echo "🧠 Memory Usage:"
+free -m | awk 'NR==2 {
+    total=$2; used=$3; free=$4;
+    printf "Used: %dMB / %dMB (%.2f%%)\n", used, total, used/total * 100
+}'
+echo
+
+# Disk Usage
+# Disk Kullanımı
+echo "💽 Disk Usage (/):"
+df -h / | awk 'NR==2 {
+    printf "Used: %s / %s (%s used)\n", $3, $2, $5
+}'
+echo
+
+# Top 5 processes by CPU
+echo "🔝 Top 5 Processes by CPU Usage:"
+ps -eo pid,comm,%cpu --sort=-%cpu | head -n 6
+echo
+
+# Top 5 processes by Memory
+echo "🔝 Top 5 Processes by Memory Usage:"
+ps -eo pid,comm,%mem --sort=-%mem | head -n 6
+echo
+
+# Failed login attempts (Stretch)
+echo "❌ Failed Login Attempts:"
+lastb -n 10 | head
+echo
+
+echo "----------------------------------------"
+echo "✅ Done!"
