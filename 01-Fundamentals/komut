@@ -1,0 +1,260 @@
+#!/bin/bash
+echo "Merhaba dünya"
+
+# Değişken
+ADI="Oğuzhan Akduman"
+echo $ADI - ${#ADI}
+
+# Yalnızca Okunabilir Değişken
+readonly OKUNABILIRADI="Sadece Okunabilir Oğuzhan Akduman"
+echo $OKUNABILIRADI
+
+# Tanımlanan değişkeni kaldırmak 
+unset ADI
+echo "Kaldırıldı: $ADI"
+
+# Dizi Tanımlama - 1
+KISILER=("OGUZHAN" "OMER" "KAYRA" "MUSTAFA")
+KISI_SAYISI=${#KISILER[@]} # Eleman Sayısı
+echo $KISI_SAYISI
+echo ${KISILER[3]} # 4. Elemanı yazar
+
+# Dizi Tanımlama - 2
+KISI[0]="Bayram"
+KISI[1]="Ayse"
+KISI[2]="Aycan"
+echo ${KISI[*]} # Tüm elemanları yazdırır
+
+# Kullanıcıdan değer almak - 1
+read
+echo "Yazılan değer:" $REPLY
+
+# Kullanıcıdan değer almak - 2
+echo "Değer Gir: "
+read DEGER
+echo "Yazdığınız değer: $DEGER"
+
+# Parametreli değerler almak
+read -p "Parametreli Adınız:" PARADI
+read -sp "Parametreli Şifre:" PARSIFRE
+echo
+echo $PARADI:$PARSIFRE
+
+# Aritmetik Operatörler - Klasik Kullanım
+read -p "Birinci Sayı:" SAYI1
+read -p "İkinci Sayı:" SAYI2
+
+let SONUC=SAYI1+SAYI2
+echo "Toplama: "$SONUC
+
+let SONUC=SAYI1-SAYI2
+echo "Çıkarma: "$SONUC
+
+let SONUC=SAYI1*SAYI2
+echo "Çarpma: "$SONUC
+
+let SONUC=SAYI1/SAYI2
+echo "Bölme: "$SONUC
+
+let SONUC=SAYI1%SAYI2
+echo "Mod: "$SONUC
+
+let SONUC=SAYI1**SAYI2
+echo "Üs Alma: "$SONUC
+
+let SONUC++
+echo "Arttırma: "$SONUC
+
+let SONUC--
+echo "Azaltma: "$SONUC
+
+# Aritmetik Operatörler - Kısaltılmış Kullanım
+A=50
+B=40
+result=$(expr $A + $B)
+echo $result
+echo $(($A + $B))
+
+
+# Koşullu İfadeler - if / else
+
+A=50
+B=30
+
+if [ "$A" -gt "$B" ]
+then
+  echo "A, B'den büyüktür."
+elif [ "$A" -lt "$B" ]
+then
+  echo "A, B'den küçüktür."
+else
+  echo "A ile B eşittir."
+fi
+
+read -p "Adınız: " ADI
+read -sp "Şifreniz: " SIFRE
+echo
+if [ $ADI = "Oguzhan" -a $SIFRE = "Akduman" ]
+then
+echo "Giriş Başarılı"
+else
+echo "Ad veya şifre hatalı"
+fi
+
+# Koşullu İfadeler - case / esac
+
+read -p "Haftanın Kaçıncı Gününü İstersin : " GUN
+
+case $GUN in
+    1) echo "Pazartesi"
+    ;;
+    2) echo "Salı"
+    ;;
+    3) echo "Çarşamba"
+    ;;
+    4) echo "Perşembe"
+    ;;
+    5) echo "Cuma"
+    ;;
+    6) echo "Cumartesi"
+    ;;
+    7) echo "Pazar"
+    ;;
+    *) echo "Hatalı bir gün"
+    ;;
+esac
+
+# Koşullu İfadeler - Select ile menü sistemi
+
+PS3="Bir renk seçin: "
+
+select renk in Kırmızı Mavi Yeşil Çıkış
+do
+    case $renk in
+        Kırmızı)
+            echo "Kırmızı seçtiniz."
+            ;;
+        Mavi)
+            echo "Mavi seçtiniz."
+            ;;
+        Yeşil)
+            echo "Yeşil seçtiniz."
+            ;;
+        Çıkış)
+            echo "Güle güle!"
+            break
+            ;;
+        *)
+            echo "Geçerli bir seçenek girin."
+            ;;
+    esac
+done
+
+# Döngüler - for
+
+for SIRA1 in {1..10}
+do
+ echo $SIRA1
+done
+
+KISILER2=("Yusuf" "Ramazan" "Sinan" "Mehmet");
+
+for KISI1 in ${KISILER2[*]}
+do
+ echo $KISI1
+done
+
+# Dögüler - While
+
+A=10
+
+while [ $A -gt 0 ]
+do
+  echo $A
+  A=$(($A - 1))
+  #A=`expr $A - 1`
+done
+
+# Dögüler - until
+
+A=10
+
+until [ ! $A -gt 0 ]
+do
+  echo $A
+  A=$(($A - 1))
+  #A=`expr $A - 1`
+done
+
+# Dögüler - İç İçe Döngüler
+
+A=0
+
+while [ "$A" -lt 10 ]
+do
+  B="$A"
+  while [ "$B" -ge 0 ]
+  do
+    echo -n "$B "
+    ((B--))
+  done
+  echo
+  ((A++))
+done
+
+# Döngüler - Continue/Break
+
+for SAYI in {1..5}
+do
+  if [ $SAYI -eq 3 -o $SAYI -eq 5 ]
+  then
+    continue;
+  fi
+  echo $SAYI
+done
+
+for SAYI in {1..5}
+do
+  if [ $SAYI -eq 3 ]
+  then
+    break;
+  fi
+  echo $SAYI
+done
+
+# Fonskiyonlar
+
+adi_yazdir () {
+echo "Oğuzhan Akduman"
+}
+
+adi_yazdir
+
+yazdir () {
+echo "Gönderilen değer:" $1
+}
+
+yazdir "Merhaba dünya"
+
+topla () {
+  return `expr $1 + $2`
+}
+
+topla 10 20
+echo $?
+
+yaz () {
+  ADI="Oğuzhan Akduman Yaz Fonksionu"
+}
+
+yaz
+echo $ADI
+
+yaz1 () {
+  local ADI="Oğuzhan Akduman yaz1 Fonksiyonu"
+}
+
+yaz1
+echo $ADI
+
+
