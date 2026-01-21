@@ -1,4 +1,4 @@
-# simple-backup-script
+# Simple Backup Script
 
 # Backup Project
 
