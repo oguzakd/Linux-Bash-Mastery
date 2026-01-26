@@ -1,6 +1,6 @@
 # 🐧 Linux & Bash Scripting Mastery
 
-Bu depo, Linux sistem yönetimi, otomasyon ve Bash scripting üzerine yaptığım tüm çalışmaları, eğitim içeriklerini ve geliştirdiğim araçları tek bir çatı altında toplamaktadır.
+Bu repo, Linux sistem yönetimi, otomasyon ve Bash scripting üzerine yaptığım tüm çalışmaları, eğitim içeriklerini ve geliştirdiğim araçları tek bir çatı altında toplamaktadır.
 
 ## 📂 Klasör Yapısı ve İçerik
 
@@ -25,3 +25,4 @@ Bu projedeki herhangi bir scripti çalıştırmak için önce çalışma izni ve
 ```bash
 chmod +x klasor_adi/script_adi.sh
 ./klasor_adi/script_adi.sh
+
